@@ -55,7 +55,7 @@ void Mach3Splitter::ViewMate(char *s1)   // char []s1
 	if(strncmp(s1,"G01 X",5)==0)D01=1;
 	if(strncmp(s1,"G01 Z",5)==0)
 	{
-	//	printf("Start of Block at ##%s## \n",s1);
+		//	printf("Start of Block at ##%s## \n",s1);
 	}
 	else 
 	
@@ -118,36 +118,43 @@ Mach3Splitter::Mach3Splitter ()
 	out_line[0]=0x00;
 	iout=0;
 	getch_count=0;
-//	cout <<"Constructor \n";
+	//	cout <<"Constructor \n";
 };
 Mach3Splitter::~Mach3Splitter ()
 {
-//	cout <<"Destructor \n";
+	//	cout <<"Destructor \n";
 	fclose(in);
 	fprintf(out,"}\n");
 	fclose(out);
 };
-
-
-
 
 int main()
 {
 	int lineCount = 0;
 	int File_Count = 1;
 	Mach3Splitter PCB;
-	PCB.Zetch = 0.007;
+	PCB.Zetch = -0.007;
 	PCB.Zsafe = 0.7500;
+	char YesNo='n';
 	
-	printf(" Please enter the etch depth, -0.007 would be 7 mils etch down.\n");
-	cin >> PCB.Zetch;
-	printf(" Please enter the Z safe height 0.75 would be 750 mills above your Z 0.0.\n");
-	cin >> PCB.Zsafe;
+	printf(" Would an etch depth of  -0.007 and a safe Z height work, y or n.\n");
+	cin >> YesNo;
+	if(YesNo != 'y')
+	{
+		printf(" Please enter the etch depth, -0.007 would be 7 mils etch down.\n");
+		cin >> PCB.Zetch;
+		printf(" Please enter the Z safe height 0.75 would be 750 mills above your Z 0.0.\n");
+		cin >> PCB.Zsafe;
+	}
 	printf(" Please enter the input file name.\n");
 	cin >> PCB.in_file;
-	//   printf("%s infile %s outfile \n",PCB.in_file,PCB.out_file);
 	sprintf(PCB.out_file,"Mill%d.tap",File_Count);
 	PCB.in = fopen(PCB.in_file,"r");
+	if(PCB.in ==NULL)
+	{
+		printf("File not found, try again. %s\n",PCB.in_file);
+		exit (0);
+	}
 	PCB.out = fopen(PCB.out_file,"w");
 	PCB.ViewMateFile = fopen("View.Mate","w");
 	PCB.PreambleVM();
