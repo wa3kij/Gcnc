@@ -162,9 +162,6 @@ int main()
 	{
 		lineCount++;
 		fgets(PCB.in_line,80,PCB.in);
-		
-		PCB.ViewMate(PCB.in_line);
-		
 		fprintf(PCB.out,"%s",PCB.in_line);
 		//     G00 Z0
 		PCB.LastZ[0]=0x00;
@@ -183,6 +180,7 @@ int main()
 			PCB.Preamble();
 			fprintf(PCB.out,PCB.LastZ);
 		}
+			PCB.ViewMate(PCB.in_line);
 	}
 
 	return 0;
